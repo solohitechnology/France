@@ -30,4 +30,4 @@ jobs:
 
       - name: Connect to EC2 instance and deploy application
         run: |
-          ssh -i ../../solomon.pem solohitech@ec2-paris2IP-44.201.192.126 'bash -s' < deploy.sh
+          ssh -i ./solomon.pem solohitech@ec2-paris2IP-44.201.192.126 'bash -s' < deploy.sh
