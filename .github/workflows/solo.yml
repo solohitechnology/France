@@ -21,12 +21,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Set up SSH
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > solomon.pem
+      - name: Change permission of SSH private key
+        run: chmod 600 solomon.pem
+
       - name: SSH into EC2 instance and run commands
         uses: appleboy/ssh-action@master
         with:
           host: ec2-44-201-192-126.compute-1.amazonaws.com
           username: solohitech
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          passphrase: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
           script: |
-            # Add your commands here
-            # Example: cd /path/to/your/app && npm install && npm run build
+            npm install
+            npm run build
+            pm2 restart app.js  
+
+      - name: Cleanup SSH private key
+        run: rm solomon.pem
