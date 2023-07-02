@@ -21,13 +21,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Prepare deployment script
-        run: |
-          echo '#!/bin/bash' >> deploy.sh
-          echo '# Add your deployment commands here' >> deploy.sh
-          echo '# Example: rsync -avz ./dist user@server:/path/to/destination' >> deploy.sh
-          chmod +x deploy.sh
+      - name: Set up SSH
+        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > ./solomon.pem
+      - name: Change permission of SSH private key
+        run: chmod 600 ./solomon.pem
 
-      - name: Connect to EC2 instance and deploy application
-        run: |
-          ssh -i ./solomon.pem solohitech@ec2-paris2IP-44.201.192.126 'bash -s' < deploy.sh
+      - name: SSH into EC2 instance and run commands
+        uses: appleboy/ssh-action@master
+        with:
+          host: ec2-44-201-192-126.compute-1.amazonaws.com
+          username: solohitech
+          key: |
+            ${{ file("./solomon.pem") }}
+          script: |
+            # Add your commands here
+            # Example: cd /path/to/your/app && npm install && npm run build
+
+      - name: Cleanup SSH private key
+        run: rm ./solomon.pem
