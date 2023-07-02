@@ -26,7 +26,7 @@ jobs:
         with:
           host: 44.201.192.126
           username: solohitech
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          password: ${{ secrets.SSH_PASSWORD }}
           script: |
             # Copy the code to the remote server
             scp -r . solohitech@ec2-44-201-192-126.compute-1.amazonaws.com:/justin
