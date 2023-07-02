@@ -29,7 +29,7 @@ jobs:
       - name: SSH into EC2 instance and run commands
         uses: appleboy/ssh-action@master
         with:
-          host: ec2-44-201-192-126.compute-1.amazonaws.com
+          host: 44.201.192.126
           username: solohitech
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
@@ -42,5 +42,4 @@ jobs:
           proxy_port: 22
           proxy_timeout: 50s
 
-      - name: Cleanup SSH private key
-        run: rm solomon.pem
+
