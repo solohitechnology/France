@@ -32,11 +32,15 @@ jobs:
           host: ec2-44-201-192-126.compute-1.amazonaws.com
           username: solohitech
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          passphrase: ${{ secrets.SSH_PRIVATE_KEY_PASSPHRASE }}
           script: |
             npm install
             npm run build
-            pm2 restart app.js  
+            pm2 restart app.js
+          port: 22
+          timeout: 50s
+          command_timeout: 10m
+          proxy_port: 22
+          proxy_timeout: 50s
 
       - name: Cleanup SSH private key
         run: rm solomon.pem
