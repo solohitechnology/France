@@ -35,7 +35,7 @@ jobs:
           script: |
             npm install
             npm run build
-            pm2 restart app.js
+            pm2 restart server.js
           port: 22
           timeout: 50s
           command_timeout: 10m
