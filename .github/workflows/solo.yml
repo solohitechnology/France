@@ -21,25 +21,21 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Set up SSH
-        run: echo "${{ secrets.SSH_PRIVATE_KEY }}" > solomon.pem
-      - name: Change permission of SSH private key
-        run: chmod 600 solomon.pem
-
-      - name: SSH into EC2 instance and run commands
+      - name: SSH into EC2 instance and deploy code
         uses: appleboy/ssh-action@master
         with:
           host: 44.201.192.126
           username: solohitech
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            npm install
-            npm run build
-            pm2 restart server.js
+            # Copy the code to the remote server
+            scp -r . solohitech@ec2-44-201-192-126.compute-1.amazonaws.com:/justin
+
+            # SSH into the remote server and perform deployment steps
+            ssh solohitech@ec2-44-201-192-126.compute-1.amazonaws.com "cd justin && npm install && npm run build && pm2 restart server.js"
+
           port: 22
           timeout: 50s
           command_timeout: 10m
           proxy_port: 22
           proxy_timeout: 50s
-
-
