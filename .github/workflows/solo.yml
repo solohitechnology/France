@@ -21,21 +21,4 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: SSH into EC2 instance and deploy code
-        uses: appleboy/ssh-action@master
-        with:
-          host: 44.201.192.126
-          username: solohitech
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            # SSH into the remote server and perform deployment steps
-            cd justin
-            npm install
-            npm run build
-            pm2 restart server.js
-
-          port: 22
-          timeout: 50s
-          command_timeout: 10m
-          proxy_port: 22
-          proxy_timeout: 50s
+   
